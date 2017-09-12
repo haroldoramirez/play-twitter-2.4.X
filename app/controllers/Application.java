@@ -1,20 +1,30 @@
 package controllers;
 
-import com.fizzed.play.twitter.TwitterPlugin;
-import play.Play;
+import com.fizzed.play.twitter.MyComponent;
 import play.mvc.Controller;
 import play.mvc.Result;
 
+import javax.inject.Inject;
+
 public class Application extends Controller {
 
-    static public TwitterPlugin TWITTER_PLUGIN = Play.application().plugin(TwitterPlugin.class);
 
-    public static Result index() {
-        return ok(views.html.index.render());
+    private MyComponent myComponent;
+
+    @Inject
+    public Application(MyComponent myComponent) {
+
+        this.myComponent = myComponent;
     }
 
-    public static TwitterPlugin twitter() {
-        return TWITTER_PLUGIN;
+    //public MyComponent TWITTER_PLUGIN = Play.application().plugin(MyComponent.class);
+
+    public Result index() {
+        return ok(views.html.index.render(myComponent.tweets()));
     }
+
+//    public MyComponent twitter() {
+//        return TWITTER_PLUGIN;
+//    }
 
 }

@@ -7,9 +7,9 @@ import twitter4j.Twitter;
 
 public class RefreshJob implements Runnable {
 
-    private final TwitterPlugin plugin;
+    private final MyComponentImpl plugin;
 
-    public RefreshJob(TwitterPlugin plugin) {
+    public RefreshJob(MyComponentImpl plugin) {
         super();
         this.plugin = plugin;
     }

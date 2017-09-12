@@ -3,19 +3,21 @@ package com.fizzed.play.twitter;
 import play.Application;
 import play.Configuration;
 import play.Logger;
-import play.Plugin;
+import play.inject.ApplicationLifecycle;
 import play.libs.Akka;
+import play.libs.F;
 import scala.concurrent.duration.FiniteDuration;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterFactory;
 import twitter4j.auth.AccessToken;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class TwitterPlugin extends Plugin {
+public class MyComponentImpl implements MyComponent {
 
     public static final String ACCESS_TOKEN = "twitter.access-token";
     public static final String ACCESS_SECRET = "twitter.access-secret";
@@ -35,18 +37,14 @@ public class TwitterPlugin extends Plugin {
 
     private final Application application;
 
-    public TwitterPlugin(Application application) {
-        this.application = application;
+    @Inject
+    public MyComponentImpl(ApplicationLifecycle lifecycle, Application application) {
+
         // create an empty list by default
         this.tweets = new CachedObj<List<Status>>(new ArrayList<Status>());
-    }
+        this.application = application;
 
-    /**
-     * Reads the configuration file, verifies configuration will make api calls, and
-     * starts job that will refresh tweets periodically.
-     */
-    @Override
-    public void onStart() {
+        // previous contents of Plugin.onStart
         Configuration configuration = application.configuration();
 
         // configure plugin from application.conf
@@ -91,6 +89,10 @@ public class TwitterPlugin extends Plugin {
         }
 
         Logger.info("twitter plugin: started");
+        lifecycle.addStopHook( () -> {
+            // previous contents of Plugin.onStop
+            return F.Promise.pure(null);
+        });
     }
 
     public Twitter createTwitter() {
