@@ -1,11 +1,13 @@
 package com.fizzed.play.twitter;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import play.Application;
 import play.Configuration;
 import play.Logger;
 import play.inject.ApplicationLifecycle;
 import play.libs.Akka;
 import play.libs.F;
+import play.libs.Json;
 import scala.concurrent.duration.FiniteDuration;
 import twitter4j.Status;
 import twitter4j.Twitter;
@@ -114,6 +116,11 @@ public class MyComponentImpl implements MyComponent {
         } else {
             return t.subList(0, max);
         }
+    }
+
+    public JsonNode tweetsJson() {
+        EnvelopeTweet envelopeTweet = new EnvelopeTweet(tweets.value());
+        return Json.toJson(envelopeTweet);
     }
 
     public void setTweets(List<Status> tweets) {

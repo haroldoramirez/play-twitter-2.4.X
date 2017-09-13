@@ -1,6 +1,7 @@
 package controllers;
 
 import com.fizzed.play.twitter.MyComponent;
+import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 
@@ -17,14 +18,13 @@ public class Application extends Controller {
         this.myComponent = myComponent;
     }
 
-    //public MyComponent TWITTER_PLUGIN = Play.application().plugin(MyComponent.class);
-
     public Result index() {
         return ok(views.html.index.render(myComponent.tweets()));
     }
 
-//    public MyComponent twitter() {
-//        return TWITTER_PLUGIN;
-//    }
+    public Result twitterJson() {
+        return ok(Json.toJson(myComponent.tweetsJson()));
+    }
+
 
 }

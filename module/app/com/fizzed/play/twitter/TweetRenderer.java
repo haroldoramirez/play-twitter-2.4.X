@@ -51,6 +51,7 @@ public class TweetRenderer {
         html.append("<p>");
 
         User user = status.getUser();
+        html.append("<img src='" + user.getOriginalProfileImageURL() +  "'alt='sdsdsd' height='42' width='42'/>");
         html.append("<a href=\"https://twitter.com/" + user.getScreenName() + "\">@" + user.getScreenName() + "</a>: ");
 
         String text = status.getText();
